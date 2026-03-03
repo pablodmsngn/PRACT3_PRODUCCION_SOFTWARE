@@ -39,6 +39,22 @@ def remove_expense(context, expense_id):
     context["service"].remove_expense(expense_id)
 
 
+@when(parsers.parse("añado dos gastos de {amount:d} euros llamado {title}"))
+def add_two_expense(context, amount, title):
+    context["service"].create_expense(
+        title=title, amount=amount, description="", expense_date=date.today()
+    )
+    context["service"].create_expense(
+        title=title, amount=amount, description="", expense_date=date.today()
+    )
+
+
+@when(parsers.parse("elimino el ultimo gasto de {amount:d} euros llamado {title}"))
+def remove_expense(context):
+    context["service"].remove_expense(expense_id)
+
+
+
 @then(parsers.parse("el total de dinero gastado debe ser {total:d} euros"))
 def check_total(context, total):
     assert context["service"].total_amount() == total
@@ -54,3 +70,51 @@ def check_month_total(context, month_name, expected_total):
 def check_expenses_length(context, expenses):
     total = len(context["db"]._expenses)
     assert expenses == total
+
+#Escenario a
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Escenario b
+
+@given(parsers.parse("un gestor con un gasto de {amount:d} euros"))
+def manager_with_one_expense(context, amount):
+    context["service"].create_expense(
+        title="Gasto inicial", amount=amount, description="", expense_date=date.today()
+    )
+
+
+@when(parsers.parse("añado un gasto de {amount:d} euros llamado {title}"))
+def add_expense(context, amount, title):
+    context["service"].create_expense(
+        title=title, amount=amount, description="", expense_date=date.today()
+    )
+
+@when(parsers.parse("añado dos gastos de {amount:d} euros llamado {title}"))
+def add_expense(context, amount, title):
+    context["service"].create_expense(
+        title=title, amount=amount, description="", expense_date=date.today()
+    )
+
+@when(parsers.parse("elimino el ultimo gasto de {amount:d} euros llamado {title}"))
+def add_expense(context, amount, title):
+    context["service"].create_expense(
+        title=title, amount=amount, description="", expense_date=date.today()
+    )
+
+
+@then(parsers.parse("el total de dinero gastado debe ser {total:d} euros"))
+def check_total(context, total):
+    assert context["service"].total_amount() == total
