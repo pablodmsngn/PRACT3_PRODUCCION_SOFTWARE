@@ -20,10 +20,10 @@ class Expense:
     def __post_init__(self):
         if self.id < 0:
             raise InvalidIdError("El id debe ser mayor o igual a 0")
-        
+
         if self.title == "":
             raise EmptyTitleError("El título no puede estar vacío")
-        
+
         if self.amount <= 0:
             raise InvalidAmountError("El importe debe ser mayor que 0")
 

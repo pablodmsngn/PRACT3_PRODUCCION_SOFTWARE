@@ -98,7 +98,6 @@ def test_create_multiple_expenses_and_list():
     assert len(expenses) == 2
     assert expenses[0].title == "Pan"
     assert expenses[1].title == "Leche"
-    
 
 
 def test_remove_expense_reduces_total():
@@ -147,7 +146,6 @@ def test_update_expense_partial_fields():
     assert expense.description == "Ropa"
 
 
-
 def test_total_amount_after_removal():
     """
     Verifica que el cálculo del total gastado se actualiza correctamente después de eliminar un gasto.
@@ -167,4 +165,3 @@ def test_total_amount_after_removal():
     service.remove_expense(1)
 
     assert service.total_amount() == 25
-

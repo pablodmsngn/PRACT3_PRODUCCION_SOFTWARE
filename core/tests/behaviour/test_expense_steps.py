@@ -65,17 +65,29 @@ def remove_last_expense(context, amount, title):
             context["service"].remove_expense(expense.id)
             break
 
+
 @when(parsers.parse("aplico un descuento del {discount:d}%"))
 def apply_discount(context, discount):
     context["service"].apply_discount(discount)
 
-@when(parsers.parse("aplico un descuento del {discount:d}% si el gasto total es mayor a {total:d} euros"))
+
+@when(
+    parsers.parse(
+        "aplico un descuento del {discount:d}% si el gasto total es mayor a {total:d} euros"
+    )
+)
 def apply_discount(context, discount, total):
     context["service"].apply_discount_if_total_is_greater_than(discount, total)
 
-@when(parsers.parse("elimino el ultimo gasto de {amount:d} euros llamado {title} si el gasto total es mayor a {total:d} euros"))
+
+@when(
+    parsers.parse(
+        "elimino el ultimo gasto de {amount:d} euros llamado {title} si el gasto total es mayor a {total:d} euros"
+    )
+)
 def remove_expense(context, amount, title, total):
     context["service"].remove_expense_if_total_is_greater_than(amount, title, total)
+
 
 @then(parsers.parse("el total de dinero gastado debe ser {total:d} euros"))
 def check_total(context, total):
@@ -92,4 +104,3 @@ def check_month_total(context, month_name, expected_total):
 def check_expenses_length(context, expenses):
     total = len(context["db"]._expenses)
     assert expenses == total
-

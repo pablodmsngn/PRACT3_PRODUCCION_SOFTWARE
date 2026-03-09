@@ -75,17 +75,20 @@ class ExpenseService:
         for expense in self._repository.list_all():
             self.update_expense(expense.id, amount=expense.amount * factor)
 
-    def apply_discount_if_total_is_greater_than(self, discount: float, total: float) -> None:
+    def apply_discount_if_total_is_greater_than(
+        self, discount: float, total: float
+    ) -> None:
         if self.total_amount() > total:
             self.apply_discount(discount)
 
-    def remove_expense_if_total_is_greater_than(self, amount: float, title: str, total: float) -> None:
+    def remove_expense_if_total_is_greater_than(
+        self, amount: float, title: str, total: float
+    ) -> None:
         if self.total_amount() > total:
             for expense in reversed(self._repository.list_all()):
                 if expense.amount == amount and expense.title == title:
                     self.remove_expense(expense.id)
                     break
-
 
     def total_by_month(self) -> dict[str, float]:
         totals = defaultdict(float)
