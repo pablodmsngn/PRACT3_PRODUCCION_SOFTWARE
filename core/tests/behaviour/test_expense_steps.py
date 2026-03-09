@@ -76,7 +76,7 @@ def apply_discount(context, discount):
         "aplico un descuento del {discount:d}% si el gasto total es mayor a {total:d} euros"
     )
 )
-def apply_discount(context, discount, total):
+def apply_discount_if_total(context, discount, total):
     context["service"].apply_discount_if_total_is_greater_than(discount, total)
 
 
@@ -85,7 +85,7 @@ def apply_discount(context, discount, total):
         "elimino el ultimo gasto de {amount:d} euros llamado {title} si el gasto total es mayor a {total:d} euros"
     )
 )
-def remove_expense(context, amount, title, total):
+def remove_expense_if_total(context, amount, title, total):
     context["service"].remove_expense_if_total_is_greater_than(amount, title, total)
 
 
