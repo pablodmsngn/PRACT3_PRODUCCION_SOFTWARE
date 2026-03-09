@@ -49,15 +49,37 @@ def add_two_expense(context, amount, title):
     )
 
 
+@when(parsers.parse("añado tres gastos de {amount:d} euros llamado {title}"))
+def add_three_expense(context, amount, title):
+    for i in range(3):
+        context["service"].create_expense(
+            title=title, amount=amount, description="", expense_date=date.today()
+        )
+
+
 @when(parsers.parse("elimino el ultimo gasto de {amount:d} euros llamado {title}"))
-def remove_expense(context):
-    context["service"].remove_expense(expense_id)
+def remove_last_expense(context, amount, title):
+    expenses = context["service"].list_expenses()
+    for expense in reversed(expenses):
+        if expense.amount == amount and expense.title == title:
+            context["service"].remove_expense(expense.id)
+            break
 
+@when(parsers.parse("aplico un descuento del {discount:d}%"))
+def apply_discount(context, discount):
+    context["service"].apply_discount(discount)
 
+@when(parsers.parse("aplico un descuento del {discount:d}% si el gasto total es mayor a {total:d} euros"))
+def apply_discount(context, discount, total):
+    context["service"].apply_discount_if_total_is_greater_than(discount, total)
+
+@when(parsers.parse("elimino el ultimo gasto de {amount:d} euros llamado {title} si el gasto total es mayor a {total:d} euros"))
+def remove_expense(context, amount, title, total):
+    context["service"].remove_expense_if_total_is_greater_than(amount, title, total)
 
 @then(parsers.parse("el total de dinero gastado debe ser {total:d} euros"))
 def check_total(context, total):
-    assert context["service"].total_amount() == total
+    assert int(context["service"].total_amount()) == total
 
 
 @then(parsers.parse("{month_name} debe sumar {expected_total:d} euros"))
@@ -71,4 +93,3 @@ def check_expenses_length(context, expenses):
     total = len(context["db"]._expenses)
     assert expenses == total
 
-#Escenario 3

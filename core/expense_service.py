@@ -68,12 +68,24 @@ class ExpenseService:
         return self._repository.list_all()
 
     def total_amount(self) -> float:
-        """
-        # FIXME:
-        Debería de devolver la suma de los amounts de todos los Expenses, ahora mismo parece devolver 0 solamente.
-        :return:
-        """
-        return 0
+        return sum(expense.amount for expense in self._repository.list_all())
+
+    def apply_discount(self, discount: float) -> None:
+        factor = 1.0 - (discount / 100.0)
+        for expense in self._repository.list_all():
+            self.update_expense(expense.id, amount=expense.amount * factor)
+
+    def apply_discount_if_total_is_greater_than(self, discount: float, total: float) -> None:
+        if self.total_amount() > total:
+            self.apply_discount(discount)
+
+    def remove_expense_if_total_is_greater_than(self, amount: float, title: str, total: float) -> None:
+        if self.total_amount() > total:
+            for expense in reversed(self._repository.list_all()):
+                if expense.amount == amount and expense.title == title:
+                    self.remove_expense(expense.id)
+                    break
+
 
     def total_by_month(self) -> dict[str, float]:
         totals = defaultdict(float)
